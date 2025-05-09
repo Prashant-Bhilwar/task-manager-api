@@ -30,5 +30,6 @@ func SetupRoutes(r *gin.Engine) {
 		auth.POST("/tasks", controllers.CreateTask)
 		auth.GET("/tasks", controllers.GetTask)
 		auth.PUT("tasks/:id", controllers.UpdateTask)
+		auth.DELETE("/tasks/:id", controllers.DeleteTask)
 	}
 }

@@ -100,3 +100,34 @@ func UpdateTask(c *gin.Context) {
 		"task":    task,
 	})
 }
+
+func DeleteTask(c *gin.Context) {
+	username, _ := c.Get("user")
+
+	//Get user
+	var user models.User
+	if err := config.DB.Where("username = ?", username).First(&user).Error; err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+
+	//Get task ID from URL
+	taskID := c.Param("id")
+
+	//Find task that belongs to this user
+	var task models.Task
+	if err := config.DB.Where("id = ? AND user_id = ?", taskID, user.ID).First(&task).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Task not found",
+		})
+		return
+	}
+
+	//Delete task
+	config.DB.Delete(&task)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Task deleted successfully",
+	})
+}
