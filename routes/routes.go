@@ -28,5 +28,6 @@ func SetupRoutes(r *gin.Engine) {
 			})
 		})
 		auth.POST("/tasks", controllers.CreateTask)
+		auth.GET("/tasks", controllers.GetTask)
 	}
 }
